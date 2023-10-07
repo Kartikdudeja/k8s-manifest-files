@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-two
+spec:
+  replicas: 25
+  selector:
+    matchLabels:
+      app: multi-deployment
+  template:
+    metadata:
+      labels:
+        app: multi-deployment
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        resources:
+          # limits:
+          #   memory: "4Mi"
+          #   cpu: "8m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+          readOnly: true
+      volumes:
+      - name: html
+        configMap:
+          name: deployment-two-config
