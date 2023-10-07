@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visitor-counter-frontend
+  labels:
+    name: visitor-counter-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: visitor-counter-frontend
+  template:
+    metadata:
+      labels:
+        app: visitor-counter-frontend
+    spec:
+      containers:
+      - name: visitor-counter-frontend
+        image: kartikd007/visitor-counter-frontend:v1
+        imagePullPolicy: Always
+        resources:
+          # limits:
+          #   memory: "32Mi"
+          #   cpu: "124m"
+        env:
+          - name: COUNTER_ENDPOINT
+            value: "http://visitor-counter-backend.default.svc.cluster.local:5000"
+        ports:
+          - name: frontend-port
+            containerPort: 8000
+            protocol: TCP
